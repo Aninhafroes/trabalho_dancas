@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ritmos e Raízes: Dança Afro-Brasileira</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FDF6E3; /* Tom de areia suave */
+        }
+
+        .afro-pattern {
+            background-color: #D97706;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2392400e' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .card-shadow {
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+        }
+
+        /* .card-shadow:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.2);
+        }
+
+        .card-shadow:active {
+            transform: translate(2px, 2px);
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.15);
+        } */
+
+        /* Animação do visualizador de áudio */
+        .bar {
+            width: 10px;
+            background: #D97706;
+            animation: equalize 1s infinite;
+        }
+        .bar:nth-child(2) { animation-duration: 0.8s; }
+        .bar:nth-child(3) { animation-duration: 1.2s; }
+        .bar:nth-child(4) { animation-duration: 0.9s; }
+        .bar:nth-child(5) { animation-duration: 1.1s; }
+
+        @keyframes equalize {
+            0% { height: 20px; }
+            50% { height: 60px; }
+            100% { height: 20px; }
+        }
+
+        .paused { animation-play-state: paused; height: 10px !important; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="afro-pattern text-white p-6 text-center border-b-4 border-yellow-900">
+        <h1 class="text-3xl md:text-5xl font-extrabold tracking-wider drop-shadow-md">RITMOS & RAÍZES</h1>
+        <p class="text-yellow-100 mt-2 text-lg">Descubra a Dança Afro-Brasileira</p>
+    </header>
+
+    <!-- Main Game Container -->
+    <main id="app" class="flex-grow flex items-center justify-center p-4">
+        <!-- Content injected by JS -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-yellow-900 text-yellow-100 p-4 text-center text-sm">
+        <p>Projeto Afroconsciência - Humanas</p>
+    </footer>
+
+    <script>
+        // --- DADOS DO JOGO ---
+        // Aqui você pode adicionar URLs reais de imagens e áudios futuramente.
+        const gameData = [
+            {
+                id: 1,
+                type: 'audio',
+                title: 'Que ritmo é esse?',
+                audioDesc: "🥁 O som é marcado por atabaques e o toque inconfundível do berimbau. O ritmo oscila entre lento (Angola) e rápido (Regional).",
+                audioSrc: 'assets/audio/capoeira.mp3',
+                imageSrc: 'assets/images/capoeira.jpeg',
+                correct: 'Capoeira',
+                options: ['Samba de Roda', 'Capoeira', 'Maracatu', 'Frevo'], 
+                fact: "A Capoeira mistura arte marcial, esporte, cultura popular, dança e música. É a única luta marcial do mundo que é acompanhada por instrumentos musicais."
+            },
+            {
+                id: 2,
+                type: 'audio',
+                title: 'Identifique a Dança',
+                audioDesc: "🎶 Trecho com percussão leve e canto de roda — atenção ao ritmo das palmas.",
+                audioSrc: 'assets/audio/samba_de_roda.mp3',
+                imageSrc: 'assets/images/samba_de_roda.jpeg',
+                correct: 'Samba de Roda',
+                options: ['Jongo', 'Samba de Roda', 'Afoxé', 'Carimbó'],
+                fact: "O Samba de Roda do Recôncavo Baiano é Patrimônio Imaterial da Humanidade. É uma das matrizes do samba carioca."
+            },
+            {
+                id: 3,
+                type: 'audio',
+                title: 'Escute com atenção',
+                audioDesc: "🥁 Batidas pesadas e graves de tambores grandes (alfaias), acompanhadas de caixas e gonguês. O ritmo é solene e forte.",
+                audioSrc: 'assets/audio/maracatu.mp3',
+                imageSrc: 'assets/images/maracatu.jpeg',
+                correct: 'Maracatu',
+                options: ['Axé', 'Maracatu', 'Maculelê', 'Bumba-meu-boi'],
+                fact: "O Maracatu Nação (ou de Baque Virado) evoca a corte real africana. As alfaias são os grandes tambores que dão a característica única do som."
+            },
+            {
+                id: 4,
+                type: 'audio',
+                title: 'Observe a Indumentária',
+                audioDesc: "🥁 Ritmo ijexá suave, cadenciado — ouça o balanço e os instrumentos de sopro/atabaque ao fundo.",
+                audioSrc: 'assets/audio/afoxe.mp3',
+                imageSrc: 'assets/images/afoxe.jpeg',
+                correct: 'Afoxé',
+                options: ['Afoxé', 'Coco', 'Tambor de Crioula', 'Congada'],
+                fact: "O Afoxé é conhecido como 'Candomblé de rua'. O ritmo ijexá é suave e cadenciado, muito tradicional na Bahia."
+            },
+            {
+                id: 5,
+                type: 'audio',
+                title: 'Qual é a dança?',
+                audioDesc: "👏 Som de palmas constante, tambores de mão (caxambu) e um canto de 'ponto' (versos improvisados) em roda.",
+                audioSrc: 'assets/audio/jongo.mp3',
+                imageSrc: 'assets/images/jongo.jpeg',
+                correct: 'Jongo',
+                options: ['Samba', 'Lundu', 'Jongo', 'Catira'],
+                fact: "O Jongo, também conhecido como Caxambu, é considerado o 'avô' do samba. Era usado pelos escravizados para se comunicar através de pontos metafóricos."
+            },
+            {
+                id: 6,
+                type: 'audio',
+                title: 'Guerreiros Dançarinos',
+                audioDesc: "🔔 Ritmo marcado por batidas rápidas em bastões, com canto de chamada e resposta.",
+                audioSrc: 'assets/audio/maculele.mp3',
+                imageSrc: 'assets/images/maculele.jpeg',
+                correct: 'Maculelê',
+                options: ['Capoeira', 'Maculelê', 'Guerreiro', 'Reisado'],
+                fact: "O Maculelê é uma dança dramática que simula uma luta tribal, usando bastões de madeira (grimas) ou facões, batendo-os no ritmo da música."
+            }
+        ];
+
+        // --- LÓGICA DO JOGO ---
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let isAudioPlaying = false;
+        let currentAudio = null; // objeto Audio atual (se houver arquivo real)
+        let gameState = 'start'; // start, playing, feedback, end
+
+        const app = document.getElementById('app');
+
+        function render() {
+            app.innerHTML = '';
+            
+            if (gameState === 'start') {
+                renderStartScreen();
+            } else if (gameState === 'playing') {
+                renderQuestion();
+            } else if (gameState === 'feedback') {
+                renderFeedback();
+            } else if (gameState === 'end') {
+                renderEndScreen();
+            }
+        }
+
+        // TELA INICIAL
+        function renderStartScreen() {
+            const container = document.createElement('div');
+            container.className = "bg-white p-8 rounded-2xl max-w-lg w-full text-center card-shadow border-2 border-yellow-900";
+            container.innerHTML = `
+                <div class="mb-6 flex justify-center text-yellow-600">
+                    <i class="fas fa-drum fa-4x"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Bem-vindo ao Desafio!</h2>
+                <p class="text-gray-600 mb-6">Você conhece os ritmos que formaram o Brasil? Teste seus conhecimentos sobre Samba, Maracatu, Capoeira e muito mais.</p>
+                <div class="space-y-4 text-left bg-yellow-50 p-4 rounded-lg mb-6 text-sm text-gray-700">
+                    <p><i class="fas fa-headphones-alt mr-2"></i> <strong>Ouça</strong> os trechos musicais.</p>
+                    <p><i class="fas fa-eye mr-2"></i> <strong>Observe</strong> as imagens das danças.</p>
+                    <p><i class="fas fa-check-circle mr-2"></i> <strong>Escolha</strong> a resposta correta.</p>
+                </div>
+                <button onclick="startGame()" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded-xl transition transform hover:scale-105 shadow-lg">
+                    INICIAR JOGO
+                </button>
+            `;
+            app.appendChild(container);
+        }
+
+        // TELA DE PERGUNTA
+        function renderQuestion() {
+            const q = gameData[currentQuestionIndex];
+            const isAudio = q.type === 'audio';
+
+            const container = document.createElement('div');
+            container.className = "bg-white rounded-2xl max-w-2xl w-full overflow-hidden card-shadow border-2 border-yellow-900";
+            
+            // Header da Pergunta
+            const header = document.createElement('div');
+            header.className = "bg-yellow-100 p-4 flex justify-between items-center border-b border-yellow-200";
+            header.innerHTML = `
+                <span class="font-bold text-yellow-800">Fase ${currentQuestionIndex + 1}/${gameData.length}</span>
+                <span class="bg-yellow-600 text-white px-3 py-1 rounded-full text-sm font-bold">${score} Pontos</span>
+            `;
+            container.appendChild(header);
+
+            // Conteúdo Visual/Auditivo
+            const content = document.createElement('div');
+            content.className = "p-6 text-center";
+
+            if (isAudio) {
+                content.innerHTML = `
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">${q.title}</h3>
+                    <div class="mb-6 relative group">
+                        <img src="${q.imageSrc}" alt="Imagem da dança ${q.correct}" class="w-full h-56 object-cover rounded-xl shadow-md border-2 border-gray-100">
+                        <!-- Overlay: central play button + visualizer anchored to bottom -->
+                        <div class="absolute inset-0 z-20">
+                            <button id="audioBtn" onclick="toggleAudio()" aria-label="Tocar áudio" class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto bg-amber-600 text-white rounded-full w-16 h-16 flex items-center justify-center hover:bg-amber-700 transition shadow-xl">
+                                <i class="fas fa-play text-2xl pl-0"></i>
+                            </button>
+                            <div id="visualizer" class="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex items-end justify-center space-x-2 pointer-events-none">
+                                <div class="bar paused"></div>
+                                <div class="bar paused"></div>
+                                <div class="bar paused"></div>
+                                <div class="bar paused"></div>
+                                <div class="bar paused"></div>
+                            </div>
+                            <p id="audioStatus" class="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-white text-sm font-mono">Clique para ouvir</p>
+                        </div>
+                    </div>
+                    <!-- descrição / legenda do áudio -->
+                    <div id="audioDescription" class="hidden bg-amber-50 border border-amber-200 p-3 rounded text-amber-900 text-sm italic mb-4">
+                        "${q.audioDesc}"
+                    </div>
+                `;
+            } else {
+                content.innerHTML = `
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">${q.title}</h3>
+                    <div class="mb-6 relative group">
+                        <img src="${q.imageSrc}" alt="Dança Afro-Brasileira" class="w-full h-64 object-cover rounded-xl shadow-md border-2 border-gray-100">
+                    </div>
+                `;
+            }
+
+            // Opções de Resposta
+            const optionsGrid = document.createElement('div');
+            optionsGrid.className = "grid grid-cols-1 md:grid-cols-2 gap-4 mt-4";
+            
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "bg-gray-50 hover:bg-yellow-100 border-2 border-gray-200 hover:border-yellow-500 text-gray-700 font-semibold py-3 px-4 rounded-xl transition duration-200 text-left flex items-center";
+                btn.innerHTML = `<span class="w-6 h-6 rounded-full border-2 border-gray-400 mr-3 flex-shrink-0"></span> ${opt}`;
+                btn.onclick = () => handleAnswer(opt);
+                optionsGrid.appendChild(btn);
+            });
+
+            content.appendChild(optionsGrid);
+            container.appendChild(content);
+            app.appendChild(container);
+        }
+
+        // TELA DE FEEDBACK
+        function renderFeedback() {
+            const q = gameData[currentQuestionIndex];
+            const isCorrect = lastAnswer === q.correct;
+            
+            const container = document.createElement('div');
+            container.className = "bg-white p-8 rounded-2xl max-w-lg w-full text-center card-shadow border-2 " + (isCorrect ? "border-green-600" : "border-red-500");
+            
+            container.innerHTML = `
+                <div class="mb-4">
+                    <i class="fas ${isCorrect ? 'fa-check-circle text-green-500' : 'fa-times-circle text-red-500'} fa-5x"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-2 ${isCorrect ? 'text-green-700' : 'text-red-700'}">
+                    ${isCorrect ? 'Parabéns!' : 'Que pena!'}
+                </h2>
+                <p class="text-gray-600 mb-4 text-lg">
+                    A resposta correta era <strong>${q.correct}</strong>.
+                </p>
+                
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 text-left mb-6 rounded-r">
+                    <h4 class="font-bold text-blue-800 text-sm uppercase mb-1">Você sabia?</h4>
+                    <p class="text-gray-700 text-sm">${q.fact}</p>
+                </div>
+
+                <button onclick="nextQuestion()" class="bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-full transition shadow-lg">
+                    Próxima <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            `;
+            app.appendChild(container);
+        }
+
+        // TELA FINAL
+        function renderEndScreen() {
+            const percentage = (score / (gameData.length * 10)) * 100;
+            let message = "";
+            if (percentage === 100) message = "Mestre da Cultura! 👑";
+            else if (percentage >= 70) message = "Mandou muito bem! 👏";
+            else message = "Continue estudando nossas raízes! 📚";
+
+            const container = document.createElement('div');
+            container.className = "bg-white p-8 rounded-2xl max-w-lg w-full text-center card-shadow border-2 border-yellow-900";
+            
+            container.innerHTML = `
+                <h2 class="text-3xl font-extrabold text-yellow-900 mb-2">Fim de Jogo!</h2>
+                <p class="text-gray-500 mb-6">Aqui está seu resultado final:</p>
+                
+                <div class="text-6xl font-black text-yellow-600 mb-4">${score} <span class="text-2xl text-gray-400 font-medium">/ ${gameData.length * 10}</span></div>
+                
+                <p class="text-xl font-bold text-gray-800 mb-8">${message}</p>
+
+                <div class="flex flex-col space-y-3">
+                    <button onclick="restartGame()" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded-xl transition shadow-lg">
+                        <i class="fas fa-redo mr-2"></i> Jogar Novamente
+                    </button>
+                    <button onclick="window.print()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-xl transition">
+                        <i class="fas fa-file-pdf mr-2"></i> Salvar Resultado
+                    </button>
+                </div>
+            `;
+            app.appendChild(container);
+        }
+
+        // LOGICA DE ESTADOS
+        let lastAnswer = '';
+
+        function startGame() {
+            score = 0;
+            currentQuestionIndex = 0;
+            gameState = 'playing';
+            render();
+        }
+
+        function handleAnswer(answer) {
+            lastAnswer = answer;
+            const q = gameData[currentQuestionIndex];
+            if (answer === q.correct) {
+                score += 10;
+            }
+            // Parar áudio se estiver tocando
+            if(isAudioPlaying) toggleAudio();
+            
+            gameState = 'feedback';
+            render();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < gameData.length) {
+                gameState = 'playing';
+            } else {
+                gameState = 'end';
+            }
+            render();
+        }
+
+        function restartGame() {
+            startGame();
+        }
+
+        // SIMULADOR DE ÁUDIO
+        function toggleAudio() {
+            const q = gameData[currentQuestionIndex];
+            const btn = document.getElementById('audioBtn');
+            const bars = document.querySelectorAll('.bar');
+            const status = document.getElementById('audioStatus');
+            const desc = document.getElementById('audioDescription');
+
+            // Se não há botão (renderizado diferente), evita erro
+            if (!btn) return;
+
+            if (!isAudioPlaying) {
+                // iniciar reprodução (real ou simulação)
+                btn.innerHTML = '<i class="fas fa-pause text-2xl"></i>';
+                bars.forEach(b => b.classList.remove('paused'));
+                status.innerText = "Tocando...";
+                if (desc) desc.classList.remove('hidden'); // mostra a descrição
+
+                // Se houver um arquivo de áudio real, use HTMLAudio
+                if (q.audioSrc) {
+                    try {
+                        // parar qualquer áudio anterior
+                        if (currentAudio) {
+                            currentAudio.pause();
+                            currentAudio.currentTime = 0;
+                            currentAudio = null;
+                        }
+                        currentAudio = new Audio(q.audioSrc);
+                        currentAudio.play().catch(() => {
+                            // autoplay ou erro de reprodução — manter simulação visual
+                        });
+                        currentAudio.onended = () => {
+                            // reset visual ao terminar
+                            isAudioPlaying = false;
+                            if (btn) btn.innerHTML = '<i class="fas fa-play text-2xl pl-1"></i>';
+                            bars.forEach(b => b.classList.add('paused'));
+                            if (status) status.innerText = "Clique para ouvir";
+                        };
+                    } catch (e) {
+                        // se falhar, continua com a simulação visual
+                    }
+                }
+
+                isAudioPlaying = true;
+            } else {
+                // pausar/stop
+                btn.innerHTML = '<i class="fas fa-play text-2xl pl-1"></i>';
+                bars.forEach(b => b.classList.add('paused'));
+                if (status) status.innerText = "Clique para ouvir";
+                if (desc) desc.classList.remove('hidden');
+
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0;
+                    currentAudio = null;
+                }
+                isAudioPlaying = false;
+            }
+        }
+
+        // Iniciar
+        render();
+
+    </script>
+</body>
+</html>
